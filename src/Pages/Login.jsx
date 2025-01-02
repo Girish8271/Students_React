@@ -1,15 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import BaseURL from "../API/API.js";
+import Navbar from "../Components/Navbar.jsx";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigates = useNavigate();
+  
+  const login = () =>{
+    localStorage.setItem("login", true);
+  }
+  useEffect(() => {
+    const login = localStorage.getItem("login");
+    if (!login) {
+      navigates("/login");
+    }
+  }, [navigate]);
+  
   // Handle form submit
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -27,6 +39,7 @@ const Login = () => {
 
         // Redirect to students details page
         navigate("/studentsDetails");
+        login();
       } else {
         // Show error if login failed
         toast.error("Login Failed! Please check your credentials.");
@@ -36,12 +49,13 @@ const Login = () => {
       toast.error(`Something went wrong! ${error.message}`);
       console.error("Error during login:", error);
     } finally {
-      setLoading(false); // Set loading to false even when error occurs
+      setIsLoading(false); // Set loading to false even when error occurs
     }
   };
 
   return (
     <>
+      <Navbar/>
       <section className="log-in-section background-image-2 section-b-space">
         <div className="container-fluid-lg w-100">
           <div className="row">
@@ -59,6 +73,7 @@ const Login = () => {
                 <div className="card-body">
                   <div className="log-in-box">
                     <div className="log-in-title text-center">
+                      
                       <h3 className="text-dark">
                         Welcome To Students Dashboard
                       </h3>
@@ -108,7 +123,7 @@ const Login = () => {
                     </div>
                     <div className="sign-up-box text-center mt-4">
                       <h4>Don't have an account?</h4>
-                      <Link to={"/"} className="text-primary">
+                      <Link to={"/signup"} className="text-primary">
                         Sign Up
                       </Link>
                     </div>

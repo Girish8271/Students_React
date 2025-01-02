@@ -1,23 +1,30 @@
-import { lazy, Suspense } from "react"; // Added Suspense for lazy loading
+import { Component, lazy, Suspense } from "react"; // Added Suspense for lazy loading
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; // Use BrowserRouter
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer} from 'react-toastify';
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import Protected from "./Components/Protected";
 
 const Signup = lazy(() => import("./Pages/Signup"));
 const Login = lazy(() => import("./Pages/Login"));
 const StudentsDetails = lazy(() => import("./Pages/StudentsDetails"));
+const Home = lazy(() => import("./Pages/Home"));
+const About = lazy(() => import("./Pages/About"));
 
 function App() {
   return (
     <Router>
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
-          <Route path="/" element={<Signup />} />
+          <Route path="/Signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/studentsDetails" element={<StudentsDetails />} />
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/studentsDetails"
+            element={<Protected component={StudentsDetails} />}
+          />
+          <Route path="/about" element={<Protected component={About} />} />
         </Routes>
       </Suspense>
       <ToastContainer autoClose={1000} />
